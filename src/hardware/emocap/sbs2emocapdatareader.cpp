@@ -40,9 +40,6 @@ Sbs2EmocapDataReader::~Sbs2EmocapDataReader()
 void Sbs2EmocapDataReader::execute()
 {
     int counter = 0;
-    int cc = 0;
-    int uu = 0;
-    int res = 0;
     while(1)
     {
         if(!running)
@@ -125,7 +122,7 @@ void Sbs2EmocapDataReader::aboutToQuit()
     sbs2EmocapMounter->stop();
 }
 
-void Sbs2EmocapDataReader::udpDataReceived(QVector<char *> *data, int counter)
+void Sbs2EmocapDataReader::udpDataReceived(QVector<char *> *data, int /*counter*/)
 {
     for (int i=0; i<data->size(); ++i)
     {

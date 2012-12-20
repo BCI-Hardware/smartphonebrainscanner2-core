@@ -50,18 +50,12 @@ void Sbs2Spectrogram::doSpectrogram(DTU::DtuArray2D<double> *input, DTU::DtuArra
 
 double Sbs2Spectrogram::window(int n)
 {
-    if (windowType == RECT)
-    {
-        return 1.0;
-    }
-    else if (windowType == HANN)//periodic, use length-1 for symmetric
-    {
+    if (windowType == HANN) //periodic, use length-1 for symmetric
         return 0.5*(1-std::cos(2*PI*n/(length)));
-    }
     else if (windowType == HAMMING)//periodic, use length-1 for symmetric
-    {
         return 0.54 - 0.46*std::cos((2*PI*n)/(length));
-    }
+    else
+        return 1.0; // RECT
 }
 
 void Sbs2Spectrogram::setWindowType(Sbs2Spectrogram::WindowType windowType_)

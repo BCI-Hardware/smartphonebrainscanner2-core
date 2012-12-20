@@ -13,8 +13,8 @@ void Sbs2EmotivPacket::update(char *data)
     }
     counter = Sbs2Common::normalize((int)data[0]);
 
-    gyroX = Sbs2Common::normalize((int)data[29]) << 4 & 0xfff0 + (data[31]>>4 & 0x0f);
-    gyroY = Sbs2Common::normalize((int)data[30]) << 4 & 0xfff0 + (data[31] & 0x0f);
+    gyroX = ((Sbs2Common::normalize((int)data[29]) << 4) & 0xfff0) + (data[31]>>4 & 0x0f);
+    gyroY = ((Sbs2Common::normalize((int)data[30]) << 4) & 0xfff0) + (data[31] & 0x0f);
 
     cq = -1;
     cqIndex = -1;

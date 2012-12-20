@@ -149,7 +149,6 @@ void Sbs2Emocap28DataReader::amp2(int number)
 
 void Sbs2Emocap28DataReader::execute1()
 {
-    int counter = 0;
     while(1)
     {
 	if(!running)
@@ -197,7 +196,6 @@ bool lessThan(const QVector<double>& s1, const QVector<double>& s2)
 
 void Sbs2Emocap28DataReader::execute2()
 {
-    int counter = 0;
     while(1)
     {
 
@@ -368,12 +366,12 @@ void Sbs2Emocap28DataReader::execute2()
 
 			if (v == 0)
 			    break;
-			if (v == 1 || v == -1 && r > r_0)
+            if ((v == 1 || v == -1) && r > r_0)
 			{
 			    mapping += v;
 			    break;
 			}
-			if (v == 2 || v == -2 && r*0.9 > r_0)
+            if ((v == 2 || v == -2) && r*0.9 > r_0)
 			{
 			    mapping += v;
 			    break;
@@ -542,7 +540,7 @@ void Sbs2Emocap28DataReader::aboutToQuit()
     sbs2Emocap28Mounter->stop();
 }
 
-void Sbs2Emocap28DataReader::udpDataReceived(QVector<char *> *data, int counter)
+void Sbs2Emocap28DataReader::udpDataReceived(QVector<char *> *data, int /*counter*/)
 {
     for (int i=0; i<data->size(); ++i)
     {

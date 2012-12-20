@@ -37,7 +37,7 @@ class Sbs2Callback : public QObject
     Q_OBJECT
 public:
     explicit Sbs2Callback(QObject *parent = 0);
-    virtual void getData(Sbs2Packet* packet) {};
+    virtual void getData(Sbs2Packet*) {};
     static int getCurrentPacketCounter();
     static int getCurrentPacket();
     QString getRawFilename();

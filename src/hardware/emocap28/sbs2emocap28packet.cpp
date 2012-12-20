@@ -98,10 +98,10 @@ void Sbs2Emocap28Packet::update(char *data1, char *data2)
         counter2 = 128;
     }
 
-    gyroX1 = Sbs2Common::normalize((int)data1[29]) <<4 & 0xfff0 + (data1[31]>>4 & 0x0f);
-    gyroY1 = Sbs2Common::normalize((int)data1[30]) << 4 & 0xfff0 + (data1[31] & 0x0f);
-    gyroX2 = Sbs2Common::normalize((int)data2[29]) <<4 & 0xfff0 + (data2[31]>>4 & 0x0f);
-    gyroY2 = Sbs2Common::normalize((int)data2[30]) << 4 & 0xfff0 + (data2[31] & 0x0f);
+    gyroX1 = ((Sbs2Common::normalize((int)data1[29]) << 4) & 0xfff0) + (data1[31]>>4 & 0x0f);
+    gyroY1 = ((Sbs2Common::normalize((int)data1[30]) << 4) & 0xfff0) + (data1[31] & 0x0f);
+    gyroX2 = ((Sbs2Common::normalize((int)data2[29]) << 4) & 0xfff0) + (data2[31]>>4 & 0x0f);
+    gyroY2 = ((Sbs2Common::normalize((int)data2[30]) << 4) & 0xfff0) + (data2[31] & 0x0f);
 
     for (int m=0; m<14; ++m)
     {

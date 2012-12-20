@@ -40,9 +40,6 @@ Sbs2EmotivDataReader::~Sbs2EmotivDataReader()
 void Sbs2EmotivDataReader::execute()
 {
     int counter = 0;
-    int cc = 0;
-    int uu = 0;
-    int res = 0;
     while(1)
     {
 	if(!running)
@@ -121,7 +118,7 @@ void Sbs2EmotivDataReader::aboutToQuit()
     sbs2EmotivMounter->stop();
 }
 
-void Sbs2EmotivDataReader::udpDataReceived(QVector<char *> *data, int counter)
+void Sbs2EmotivDataReader::udpDataReceived(QVector<char *> */*data*/, int /*counter*/)
 {
     for (int i=0; i<data->size(); ++i)
     {

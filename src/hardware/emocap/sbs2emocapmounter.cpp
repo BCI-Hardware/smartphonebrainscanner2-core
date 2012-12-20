@@ -14,7 +14,7 @@ Sbs2EmocapMounter* Sbs2EmocapMounter::New(QObject *parent)
     return m_pInstance;
 }
 
-Sbs2EmocapMounter::Sbs2EmocapMounter(QObject *parent)
+Sbs2EmocapMounter::Sbs2EmocapMounter(QObject */*parent*/)
 {
     init();
 }
@@ -199,8 +199,8 @@ QString tempSerialNumber = QString();
         tmpSerial[i] = (char)wstr[i];
     }
     tempSerialNumber = QString(tmpSerial);
-    return tempSerialNumber;
 #endif
+    return tempSerialNumber;
 }
 
 

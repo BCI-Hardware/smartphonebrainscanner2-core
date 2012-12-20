@@ -59,7 +59,7 @@ class DtuArray2D : public TNT::Array2D<T>
         void transpose(DtuArray2D<T>* A); // write to given variable
         void transpose(DtuArray2D<T>& A); // write to given variable
         int transpose_insitu(); // transpose self, in place
-        int getSVD(JAMA::SVD<T> &A); // write to given variable
+        void getSVD(JAMA::SVD<T> &A); // write to given variable
         void pinv(DtuArray2D<T>* A); // write to given variable
         inline T trace();
         void toIdentityMatrix();
@@ -430,7 +430,7 @@ int DtuArray2D<T>::subtract(const DtuArray2D<T>* B, DtuArray2D<T>* out)
 }
 
 template <class T>
-int DtuArray2D<T>::getSVD(JAMA::SVD<T> &out)
+void DtuArray2D<T>::getSVD(JAMA::SVD<T> &out)
 {
     out = JAMA::SVD<T>(this->toTntArray2D());
 }

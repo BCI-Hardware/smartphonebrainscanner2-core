@@ -30,7 +30,7 @@ void Sbs2EmotivDecryptor::setSerialNumber(QString serialNumber_)
 
 void Sbs2EmotivDecryptor::initialize() {}
 
-void Sbs2EmotivDecryptor::decrypt(char cipher[32], char plain[32])
+void Sbs2EmotivDecryptor::decrypt(char /*cipher[32]*/, char plain[32])
 {
 
 
