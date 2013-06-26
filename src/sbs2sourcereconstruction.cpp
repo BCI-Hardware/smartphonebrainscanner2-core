@@ -191,39 +191,28 @@ void Sbs2SourceReconstrucion::doRecPow(DTU::DtuArray2D<double> *input_, DTU::Dtu
 
 void Sbs2SourceReconstrucion::sourceSpectrogram()
 {
-
-
     for (int vertex = 0; vertex < weightedInput->dim1(); ++vertex)
     {
-
         if (verticesToExtract != 0 && !verticesToExtract->contains(vertex))
             continue;
 
         for (int sample = 0; sample < weightedInput->dim2(); ++sample)
         {
             (*tempInput)[0][sample] = (*weightedInput)[vertex][sample];
-
         }
-
 
         sbs2Spectrogram->doSpectrogram(tempInput,tempOutput);
 
         for (int v = 0; v < tempOutput->dim2()/2; ++v) //re & img
         {
-
-
             if (v == 0)
                 (*output)[v][vertex] = std::pow((*tempOutput)[0][v],2.0);
             else
                 (*output)[v][vertex] = std::pow((*tempOutput)[0][v],2.0) + std::pow((*tempOutput)[0][v+tempOutput->dim2()/2],2.0);
 
         }
-
-
     }
-
 }
-
 
 
 void Sbs2SourceReconstrucion::collectDataForModelUpdate()
@@ -247,15 +236,11 @@ void Sbs2SourceReconstrucion::collectDataForModelUpdate()
     }
 
     toModelUpdateValuesIndex = (toModelUpdateValuesIndex + samplesDelta)%currentModelUpdateValues->dim2();
-
-
 }
-
 
 
 void Sbs2SourceReconstrucion::doModelUpdate()
 {
-
     //FIXME
     if (modelUpdateReady) //DELETME
         ++modelUpdateDeltaCollected;
@@ -315,18 +300,15 @@ void Sbs2SourceReconstrucion::readMNEFixedWeights()
     }
 
     int i=0;
-    while(!file.atEnd())
+    while (!file.atEnd())
     {
         QStringList list = QString(file.readLine().data()).split("\t");
         for (int j=0; j<list.size(); ++j)
         {
             (*w)[i][j] = list.at(j).toDouble();
-
         }
         ++i;
     }
-
-
 }
 
 void Sbs2SourceReconstrucion::weight()
@@ -336,7 +318,6 @@ void Sbs2SourceReconstrucion::weight()
 
 void Sbs2SourceReconstrucion::reconstruct()
 {
-
     if (sumType == MEAN)
         calculateMean();
     if (sumType == POWER)
@@ -377,7 +358,6 @@ void Sbs2SourceReconstrucion::calculatePower()
         vertexMean = sum/(double)weightedInput->dim2();
         (*output)[0][row] = vertexMean;
     }
-
 }
 
 void Sbs2SourceReconstrucion::updateModel()
@@ -386,14 +366,12 @@ void Sbs2SourceReconstrucion::updateModel()
         return;
     modelUpdateReady = 0;
 
-
     //TODO: signal when new beta and alpha are ready
 
     //qDebug() << "****";
 
     //we collect only raw values and weight them right before updating the model
     w->multiply(currentModelUpdateValues,currentModelUpdateValuesVertices);
-
 
     //Sbs2Timer::tic("updateAlpha()");
     updateAlpha();
@@ -409,7 +387,6 @@ void Sbs2SourceReconstrucion::updateModel()
 
     modelUpdateReady = 1;
     tempModelUpdatedReady = 1;
-
 }
 
 void Sbs2SourceReconstrucion::updateAlpha()
@@ -420,13 +397,10 @@ void Sbs2SourceReconstrucion::updateAlpha()
 
     calculateSigma();
 
-
     for (int j=0; j<vertices; ++j)
     {
         for (int i=0; i<vertices; ++i)
         {
-
-
             tempInvAlpha += (*kInv)[i][j]*(*sigmaS)[j][i];
             for (int t=0; t<modelUpdateSamplesLength; ++t)
             {
@@ -434,7 +408,6 @@ void Sbs2SourceReconstrucion::updateAlpha()
             }
         }
     }
-
 
     //    std::cout << "ALPHA:"<<std::endl;
     //    std::cout << "tempInvAlpha: "<<tempInvAlpha <<std::endl;
@@ -470,7 +443,6 @@ void Sbs2SourceReconstrucion::updateBeta()
         }
     }
 
-
     for (int t=0; t<modelUpdateSamplesLength; ++t)
     {
         for (int j=0; j<channels; ++j)
@@ -483,7 +455,6 @@ void Sbs2SourceReconstrucion::updateBeta()
         }
     }
 
-
     //    std::cout << "BETA:"<<std::endl;
     //    std::cout << "tempInvBeta: "<<tempInvBeta<<std::endl;
     tempInvBeta = modelUpdateSamplesLength * tempInvBeta + tempEsMean + Ey;
@@ -494,12 +465,10 @@ void Sbs2SourceReconstrucion::updateBeta()
     //    std::cout << "invBeta: "<<invBeta<<std::endl;
     //    std::cout << "----"<<std::endl;
     //     std::cout << invBeta << std::endl;
-
 }
 
 void Sbs2SourceReconstrucion::updateW()
 {
-
     calculateInputMatrix();
     inputMatrix->pinv(inputMatrix);
     kat->multiply(inputMatrix,invAlpha,tempW);
@@ -507,7 +476,6 @@ void Sbs2SourceReconstrucion::updateW()
     midW = w;
     w = tempW;
     tempW = midW;
-
 }
 
 
@@ -546,7 +514,6 @@ void Sbs2SourceReconstrucion::calculateSigma()
             }
             (*sigmaS)[i][j] = ((*k)[i][j]-s)*invAlpha;
         }
-
     }
     delete[] Bcolj;
 }
@@ -605,7 +572,6 @@ void Sbs2SourceReconstrucion::readPriorSpatialCoherence()
         for (int j=0; j<list.size(); ++j)
         {
             (*k)[i][j] = list.at(j).toDouble();
-
         }
         ++i;
     }
@@ -632,7 +598,6 @@ void Sbs2SourceReconstrucion::readPriorSpatialCoherenceInverse()
         for (int j=0; j<list.size(); ++j)
         {
             (*kInv)[i][j] = list.at(j).toDouble();
-
         }
         ++i;
     }
