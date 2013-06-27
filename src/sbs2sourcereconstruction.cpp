@@ -153,8 +153,6 @@ void Sbs2SourceReconstrucion::doRec(DTU::DtuArray2D<double> *input_, DTU::DtuArr
     (*sourceReconstrutionReady) = 1;
 }
 
-
-
 void Sbs2SourceReconstrucion::doRecPow(DTU::DtuArray2D<double> *input_, DTU::DtuArray2D<double> *output_, int* sourceReconstrutionReady)
 {
     (*sourceReconstrutionReady) = 0;
@@ -188,7 +186,6 @@ void Sbs2SourceReconstrucion::doRecPow(DTU::DtuArray2D<double> *input_, DTU::Dtu
     (*sourceReconstrutionReady) = 1;
 }
 
-
 void Sbs2SourceReconstrucion::sourceSpectrogram()
 {
     for (int vertex = 0; vertex < weightedInput->dim1(); ++vertex)
@@ -209,7 +206,6 @@ void Sbs2SourceReconstrucion::sourceSpectrogram()
                 (*output)[v][vertex] = std::pow((*tempOutput)[0][v],2.0);
             else
                 (*output)[v][vertex] = std::pow((*tempOutput)[0][v],2.0) + std::pow((*tempOutput)[0][v+tempOutput->dim2()/2],2.0);
-
         }
     }
 }
@@ -247,7 +243,6 @@ void Sbs2SourceReconstrucion::doModelUpdate()
 
     if (modelUpdateReady)
     {
-
         if (modelUpdateDeltaCollected < modelUpdateDelta)
             return;
 
@@ -290,6 +285,7 @@ void Sbs2SourceReconstrucion::preprocessData()
     }
 }
 
+
 void Sbs2SourceReconstrucion::readMNEFixedWeights()
 {
     QFile file(QString(Sbs2Common::getRootAppPath())+QString("mobi_weights_spheres_reduced.txt"));
@@ -311,10 +307,12 @@ void Sbs2SourceReconstrucion::readMNEFixedWeights()
     }
 }
 
+
 void Sbs2SourceReconstrucion::weight()
 {
     w->multiply(input,weightedInput);
 }
+
 
 void Sbs2SourceReconstrucion::reconstruct()
 {
@@ -323,6 +321,7 @@ void Sbs2SourceReconstrucion::reconstruct()
     if (sumType == POWER)
         calculatePower();
 }
+
 
 void Sbs2SourceReconstrucion::calculateMean()
 {
@@ -360,6 +359,7 @@ void Sbs2SourceReconstrucion::calculatePower()
     }
 }
 
+
 void Sbs2SourceReconstrucion::updateModel()
 {
     if(!modelUpdateReady)
@@ -389,9 +389,9 @@ void Sbs2SourceReconstrucion::updateModel()
     tempModelUpdatedReady = 1;
 }
 
+
 void Sbs2SourceReconstrucion::updateAlpha()
 {
-
     double tempInvAlpha = 0.0;
     double tempEsMean = 0.0;
 
@@ -420,9 +420,9 @@ void Sbs2SourceReconstrucion::updateAlpha()
     //    std::cout << invAlpha <<" ";
 }
 
+
 void Sbs2SourceReconstrucion::updateBeta()
 {
-
     double tempInvBeta = 0.0;
     double tempEsMean = 0.0;
     double Ey = 0.0;
@@ -467,6 +467,7 @@ void Sbs2SourceReconstrucion::updateBeta()
     //     std::cout << invBeta << std::endl;
 }
 
+
 void Sbs2SourceReconstrucion::updateW()
 {
     calculateInputMatrix();
@@ -491,7 +492,6 @@ void Sbs2SourceReconstrucion::calculateInputMatrix()
                 (*inputMatrix)[row][column] = (*akat)[row][column] * invAlpha;
         }
     }
-
 }
 
 void Sbs2SourceReconstrucion::calculateSigma()
@@ -518,15 +518,25 @@ void Sbs2SourceReconstrucion::calculateSigma()
     delete[] Bcolj;
 }
 
+
+/**
+ * @brief Sbs2SourceReconstrucion::setSumType
+ * @param sumType_ should be either 'MEAN' or 'SUM'
+ *
+ * Set the 'sumType' variable
+ */
 void Sbs2SourceReconstrucion::setSumType(SumType sumType_)
 {
     sumType = sumType_;
 }
 
-/**
-  Reading a.
-  */
 
+/**
+ * @brief Sbs2SourceReconstrucion::readForwardModel
+ *
+ * Read the forward model from the "hardware/<hardware>/forwardmodel_spheres_reduced.txt" file.
+ * It sets up the (private) 'a' array
+ */
 void Sbs2SourceReconstrucion::readForwardModel()
 {
     QFile file(QString(Sbs2Common::getRootAppPath()) + QString("hardware/") + hardware + QString("/") + QString("forwardmodel_spheres_reduced.txt"));
@@ -544,17 +554,18 @@ void Sbs2SourceReconstrucion::readForwardModel()
         for (int j=0; j<list.size(); ++j)
         {
             (*a)[i][j] = list.at(j).toDouble() * paramAScaling;
-
         }
         ++i;
     }
-
 }
 
-/**
-  Reading k.
-  */
 
+/**
+ * @brief Sbs2SourceReconstrucion::readPriorSpatialCoherence
+ *
+ * Read the prior for spatial coherence from the "hardware/<hardware>/spatialCoherenceSmooth0-2_reduced.txt".
+ * The (private) 'k' array is setup.
+ */
 void Sbs2SourceReconstrucion::readPriorSpatialCoherence()
 {
     QFile file(QString(Sbs2Common::getRootAppPath())+ QString("hardware/")+hardware+QString("/")+QString("spatialCoherenceSmooth0-2_reduced.txt"));
