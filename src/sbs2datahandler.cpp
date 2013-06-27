@@ -88,7 +88,6 @@ void Sbs2DataHandler::spectrogramChannel()
     if (!spectrogramChannelOn)
         return;
 
-
     for (int row = 0; row<Sbs2Common::channelsNo(); ++row)
     {
         for (int column = (toSpectrogramValues->dim2() - 1); column > 0; --column)
@@ -120,14 +119,25 @@ void Sbs2DataHandler::spectrogramChannel()
     emit spectrogramUpdated();
 }
 
+/**
+ * @brief Sbs2DataHandler::sourceReconstruction
+ *
+ * Runs the source reconstruction with Sbs2SourceReconstrucion::doRec.
+ * This only happes is 'sourceReconstructionOn' is turned on. This variable is controlled by
+ * Sbs2DataHandler::turnSourceReconstructionOn
+ */
 void Sbs2DataHandler::sourceReconstruction()
 {
+    qDebug() << "Sbs2DataHandler::sourceReconstruction()";
+
     if (!sourceReconstructionOn)
+        qDebug() << "sourceReconstructionOn not on returning from Sbs2DataHandler::sourceReconstruction()";
         return;
 
     if (isSourceReconstructionReady)
     {
         isSourceReconstructionReady = 0;
+        qDebug() << "emitting sourceReconstructionReady() from Sbs2DataHandler::sourceReconstruction()";
         emit sourceReconstructionReady();
     }
 
@@ -136,7 +146,6 @@ void Sbs2DataHandler::sourceReconstruction()
         for (int column = (toSourceReconstructionValues->dim2()-1); column > 0; --column)
             (*toSourceReconstructionValues)[row][column] = (*toSourceReconstructionValues)[row][column-1];
         (*toSourceReconstructionValues)[row][0] = thisPacket->filteredValues[Sbs2Common::getChannelNames()->at(row)];
-
     }
 
     ++sourceReconstructionDeltaCollected;
@@ -325,6 +334,7 @@ void Sbs2DataHandler::setWindowType(Sbs2Spectrogram::WindowType windowType)
 
 void Sbs2DataHandler::turnSourceReconstructionOn(int sourceReconstructionSamples_, int sourceReconstructionDelta_, int sourceReconstructionModelUpdateLength_, int sourceReconstructionModelUpdateDelta_, QString hardware_)
 {
+    qDebug() << "Sbs2DataHandler::turnSourceReconstructionOn";
 
     hardware = hardware_;
     turnSourceReconstructionPowerOff();
@@ -358,7 +368,6 @@ void Sbs2DataHandler::turnSourceReconstructionOn(int sourceReconstructionSamples
 
     (*toSourceReconstructionValues) = 0;
     (*sourceReconstructionValues) = 0;
-
 
     sbs2SourceReconstruction->setMeanExtraction(1);
 
@@ -394,6 +403,7 @@ void Sbs2DataHandler::turnSourceReconstructionOff()
 
 void Sbs2DataHandler::turnSourceReconstructionPowerOn(int sourceReconstructionSamples_, int sourceReconstructionDelta_, int sourceReconstructionModelUpdateLength_, int sourceReconstructionModelUpdateDelta_, QString hardware_)
 {
+    qDebug() << "Sbs2DataHandler::turnSourceReconstructionPowerOn";
 
     hardware = hardware_;
     turnSourceReconstructionOff();
