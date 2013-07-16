@@ -9,8 +9,6 @@ class Sbs2FakePacket : public Sbs2Packet
 public:
     Sbs2FakePacket(QObject* parent);
     void update(double *data);
-    
-    
 };
 
 #endif // SBS2FAKEPACKET_H

@@ -27,7 +27,6 @@ private:
     QString filename;
     QFile* file;
     double* buffer;
-    
 };
 
 #endif // SBS2FAKEDATAREADER_H

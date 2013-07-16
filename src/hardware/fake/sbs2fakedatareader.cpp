@@ -1,13 +1,12 @@
 #include "sbs2fakedatareader.h"
-
-#include<QtCore>
+#include <QtCore>
 
 Sbs2FakeDataReader* Sbs2FakeDataReader::m_pInstance = 0;
 
 Sbs2FakeDataReader* Sbs2FakeDataReader::New(Sbs2Callback *sbs2Callback_, int readOnlyFromNetwork_, QObject *parent)
 {
     if (!m_pInstance)
-    m_pInstance = new Sbs2FakeDataReader(sbs2Callback_, readOnlyFromNetwork_, parent);
+        m_pInstance = new Sbs2FakeDataReader(sbs2Callback_, readOnlyFromNetwork_, parent);
 
     return m_pInstance;
 }
@@ -26,7 +25,6 @@ Sbs2FakeDataReader::Sbs2FakeDataReader(Sbs2Callback *sbs2Callback_, int readOnly
 
 void Sbs2FakeDataReader::execute()
 {
-
     int ms = 1000.0/Sbs2Common::samplingRate();
     struct timespec ts = { ms / 1000, (ms % 1000) * 1000 * 1000 };
     QString line ("");
@@ -34,7 +32,7 @@ void Sbs2FakeDataReader::execute()
 
     int loop = 0;
 
-    while(running)
+    while (running)
     {
         ++framesRead;
 
@@ -47,17 +45,16 @@ void Sbs2FakeDataReader::execute()
             buffer[ch] = values.at(ch).toDouble();
         }
 
-
         sbs2Packets[currentIndex]->update(buffer);
         sbs2Callback->getData(sbs2Packets[currentIndex]);
-        currentIndex = (currentIndex+1)%256;
+        currentIndex = (currentIndex+1) % 256;
 
         nanosleep(&ts, NULL);
 
-        if(loop)
+        if (loop)
         {
             // reset file after 256
-            if(framesRead%256 == 0)
+            if (framesRead % 256 == 0)
             {
                 file->seek(0);
                 // discard first line
@@ -66,13 +63,12 @@ void Sbs2FakeDataReader::execute()
         }
 
         // loop file
-        if(file->atEnd())
+        if (file->atEnd())
         {
             file->seek(0);
             // discard first line
             file->readLine();
         }
-
     }
 
     qDebug() << "Sbs2FakeDataReader. Out of loop - stopped...";
@@ -80,16 +76,16 @@ void Sbs2FakeDataReader::execute()
 
 void Sbs2FakeDataReader::start()
 {
-    if(filename.length() == 0)
+    if (filename.length() == 0)
     {
         qDebug() << "No data file!";
         return;
     }
 
-    if(file == 0)
+    if (file == 0)
         file = new QFile(Sbs2Common::getRootAppPath() + filename);
 
-    if(!file->open(QIODevice::ReadOnly))
+    if (!file->open(QIODevice::ReadOnly))
     {
         qDebug() << "Error opening data file:" << Sbs2Common::getRootAppPath() + filename;
         return;
@@ -100,7 +96,7 @@ void Sbs2FakeDataReader::start()
     QString line = file->readLine('\n');
 
     // MRA TODO: Implement check for no. of channels
-    if(buffer == 0)
+    if (buffer == 0)
         buffer = new double[Sbs2Common::channelsNo()];
 
     running = 1;
@@ -113,9 +109,9 @@ Sbs2FakeDataReader::~Sbs2FakeDataReader()
 
     // MRA TODO: clean up dynamic allocated memory
 
-    if(file != 0)
+    if (file != 0)
     {
-        if(file->isOpen())
+        if (file->isOpen())
             file->close();
 
         delete file;
